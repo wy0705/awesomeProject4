@@ -48,7 +48,7 @@ func Myreadfile() string {
 //随机生成类型
 func randNature() string {
 	rand.Seed(time.Now().UnixNano())
-	balance1:= [3]string{"int","string","float"}
+	balance1:= [3]string{"int","string","float64"}
 	return balance1[rand.Intn(3)]
 }
 //随机生成字符串
@@ -56,7 +56,7 @@ func randstring() string {
 	rand.Seed(time.Now().UnixNano())
 	balance1:= [20]byte{'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t'}
 	balance2:= [20]byte{'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T'}
-	result:=[4]byte{balance2[rand.Intn(20)],balance1[rand.Intn(20)],balance1[rand.Intn(20)],balance1[rand.Intn(20)]}
+	result:=[6]byte{'"',balance2[rand.Intn(20)],balance1[rand.Intn(20)],balance1[rand.Intn(20)],balance1[rand.Intn(20)],'"'}
 	var str string = string(result[:])
 	return str
 
@@ -122,7 +122,7 @@ func randresult(nature string) string {
 	switch nature {
 	case "int": s=strconv.Itoa(rand.Intn(100))//随机生成数字
 	case "string":s=randstring()//随机生成字符串
-	case "float": s=strconv.FormatFloat(randFloat64(0.001234,0.009874), 'g', 5, 32)
+	case "float64": s=strconv.FormatFloat(randFloat64(0.001234,0.009874), 'g', 5, 32)
 	}
 	return s
 }
@@ -140,7 +140,7 @@ func WriteGoFile(strs []string)  {
 	natures:=[]string{}
 	for i := 0; i < 22; i++ {
 		nature:=randNature()
-		s=s+"type "+strs[i]+nature+"\n"
+		s=s+"type "+strs[i]+" "+nature+"\n"
 		ii:=i+1
 		natures=append(natures,strs[ii]+":"+randresult(nature))
 		i++
@@ -159,6 +159,16 @@ func WriteGoFile(strs []string)  {
 		s=s+"func (t *Test)get"+io.Capitalize(strs[ii])+"() "+strs[i]+"{\n"+"return t."+strs[ii]+"\n}\n"
         i++
 	}
+	s=s+"func Myref() {\nt:=Test{"
+	for i := 0; i < 11; i++ {
+		if i!=10 {
+			s=s+natures[i]+","
+		}else {
+			s=s+natures[i]+"}\n"
+		}
+
+	}
+	s=s+"a:=reflect.TypeOf(t)\n\tb:=reflect.ValueOf(t)\nfor i := 0; i < a.NumField(); i++ {\n\t\tkey:=a.Field(i)\n\t\tval:=b.Field(i)\n\t\tfmt.Println(key.Name,key.Type,\"|\",val)\n\t}\n}"
 	fout.WriteString(s)
 
 }

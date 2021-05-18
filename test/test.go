@@ -1,55 +1,71 @@
 package test
-type Fl int
-type Ig int
-type Gb int
-type Qd int
-type Kh int
-type Sj int
-type Dp int
-type Kk int
-type He int
-type Al int
-type Eh int
+
+import (
+	"fmt"
+	"reflect"
+)
+
+type Oa int
+type Ci int
+type Jm int
+type Ri int
+type Os int
+type Rr float64
+type Ck string
+type Tc float64
+type Fe int
+type Gf int
+type Cs float64
 type Test struct {
-ti Fl
-sj Ig
-qg Gb
-mh Qd
-eq Kh
-iq Sj
-og Dp
-qj Kk
-lj He
-pm Al
-fj Eh
+pq Oa
+re Ci
+ej Jm
+hl Ri
+fl Os
+ak Rr
+df Ck
+hn Tc
+js Fe
+ma Gf
+gd Cs
 }
-func (t *Test)setTi(ti Fl) {
-t.ti=ti
+func (t *Test)setPq(pq Oa) {
+t.pq=pq
 }
-func (t *Test)getTi() Fl{
-return t.ti
+func (t *Test)getPq() Oa{
+return t.pq
 }
-func (t *Test)setSj(sj Ig) {
-t.sj=sj
+func (t *Test)setRe(re Ci) {
+t.re=re
 }
-func (t *Test)getSj() Ig{
-return t.sj
+func (t *Test)getRe() Ci{
+return t.re
 }
-func (t *Test)setQg(qg Gb) {
-t.qg=qg
+func (t *Test)setEj(ej Jm) {
+t.ej=ej
 }
-func (t *Test)getQg() Gb{
-return t.qg
+func (t *Test)getEj() Jm{
+return t.ej
 }
-func (t *Test)setMh(mh Qd) {
-t.mh=mh
+func (t *Test)setHl(hl Ri) {
+t.hl=hl
 }
-func (t *Test)getMh() Qd{
-return t.mh
+func (t *Test)getHl() Ri{
+return t.hl
 }
-func (t *Test)setEq(eq Kh) {
-t.eq=eq
+func (t *Test)setFl(fl Os) {
+t.fl=fl
 }
-func (t *Test)getEq() Kh{
-return t.eq
+func (t *Test)getFl() Os{
+return t.fl
+}
+func Myref() {
+t:=Test{pq:75,re:95,ej:41,hl:29,fl:23,ak:0.006066,df:"Hhhl",hn:0.008828,js:22,ma:37,gd:0.007192}
+a:=reflect.TypeOf(t)
+	b:=reflect.ValueOf(t)
+for i := 0; i < a.NumField(); i++ {
+		key:=a.Field(i)
+		val:=b.Field(i)
+		fmt.Println(key.Name,key.Type,"|",val)
+	}
 }
