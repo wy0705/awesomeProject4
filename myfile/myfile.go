@@ -23,7 +23,7 @@ func Mywritefile(s string) {
 
 }
 func Myreadfile() string {
-	userFile := "/home/wy/go/src/awesomeProject4/res/myfile.txt" //文件路径
+	userFile := "/home/wy/go/src/awesomeProject4/res/myfile1.txt" //文件路径
 	fin, err := os.Open(userFile)                                //打开文件,返回File的内存地址
 	defer fin.Close()                                            //延迟关闭资源
 	if err != nil {
@@ -46,13 +46,13 @@ func Myreadfile() string {
 	return str
 }
 //随机生成类型
-func randNature() string {
+func RndNature() string {
 	rand.Seed(time.Now().UnixNano())
 	balance1:= [3]string{"int","string","float64"}
 	return balance1[rand.Intn(3)]
 }
 //随机生成字符串
-func randstring() string {
+func Randstring() string {
 	rand.Seed(time.Now().UnixNano())
 	balance1:= [20]byte{'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t'}
 	balance2:= [20]byte{'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T'}
@@ -62,14 +62,14 @@ func randstring() string {
 
 }
 //随机整数
-func randInt64(min, max int64) int64 {
+func RandInt64(min, max int64) int64 {
 	if min >= max || min == 0 || max == 0 {
 		return max
 	}
 	rand.Seed(time.Now().UnixNano())
 	return rand.Int63n(max-min) + min
 }
-func randFloat64(min,max float64) float64{
+func RandFloat64(min,max float64) float64{
 	//转为字符串
 	my_min := strconv.FormatFloat(min,'f',-1,64)
 	my_max := strconv.FormatFloat(max,'f',-1,64)
@@ -104,7 +104,7 @@ func randFloat64(min,max float64) float64{
 		qian1,_ := strconv.ParseInt(houzhui1,10,64)
 		qian2,_ := strconv.ParseInt(houzhui2,10,64)
 		//生成随机整数
-		jj := randInt64(qian1,qian2)
+		jj := RandInt64(qian1,qian2)
 		//随机整数转字符串
 		jj_str := strconv.FormatInt(jj,10)
 		//前缀拼接随机字符串
@@ -117,17 +117,17 @@ func randFloat64(min,max float64) float64{
 }
 
 //随机生成类型值
-func randresult(nature string) string {
+func Randresult(nature string) string {
 	var s string
 	switch nature {
 	case "int": s=strconv.Itoa(rand.Intn(100))//随机生成数字
-	case "string":s=randstring()//随机生成字符串
-	case "float64": s=strconv.FormatFloat(randFloat64(0.001234,0.009874), 'g', 5, 32)
+	case "string":s=Randstring()//随机生成字符串
+	case "float64": s=strconv.FormatFloat(RandFloat64(0.001234,0.009874), 'g', 5, 32)
 	}
 	return s
 }
 //写入go文件
-func WriteGoFile(strs []string)  {
+func WriteGoFile(strs []string,natures []string)  {
 	userFile := "/home/wy/go/src/awesomeProject4/test/test.go" //文件路径
 	fout,err := os.Create(userFile) //根据路径创建File的内存地址
 	defer fout.Close() //延迟关闭资源
@@ -137,34 +137,21 @@ func WriteGoFile(strs []string)  {
 	}
 	var s string="package test\n"
 
-	natures:=[]string{}
-	for i := 0; i < 22; i++ {
-		nature:=randNature()
-		s=s+"type "+strs[i]+" "+nature+"\n"
-		ii:=i+1
-		natures=append(natures,strs[ii]+":"+randresult(nature))
-		i++
-	}
 	s=s+"type Test struct {\n"
-	for i := 0; i < 21; i++ {
-		ii:=i+1
-		s=s+strs[ii]
-		s=s+" "+strs[i]+"\n"
-		i++
+	for i := 0; i < 10; i++ {
+		s=s+strs[i*2]+" "+natures[i]+"\n"
 	}
 	s=s+"}\n"
 	for i := 0; i < 10; i++ {
-		ii:=i+1
-		s=s+"func (t *Test)set"+io.Capitalize(strs[ii])+"("+strs[ii]+" "+strs[i]+") {\n"+"t."+strs[ii]+"="+strs[ii]+"\n}\n"
-		s=s+"func (t *Test)get"+io.Capitalize(strs[ii])+"() "+strs[i]+"{\n"+"return t."+strs[ii]+"\n}\n"
-        i++
+		s=s+"func (t *Test)Set"+io.Capitalize(strs[i*2])+"("+strs[i*2]+" "+natures[i]+") {\n"+"t."+strs[i*2]+"="+strs[i*2]+"\n}\n"
+		s=s+"func (t *Test)Get"+io.Capitalize(strs[i*2])+"() "+natures[i]+"{\n"+"return t."+strs[i*2]+"\n}\n"
 	}
-	s=s+"func Myref() {\nt:=Test{"
+	s=s+"func Myref() {\nt:=Test{\n"
 	for i := 0; i < 11; i++ {
 		if i!=10 {
-			s=s+natures[i]+","
+			s=s+strs[i*2]+":"+strs[i*2+1]+","
 		}else {
-			s=s+natures[i]+"}\n"
+			s=s+strs[i*2]+":"+strs[i*2+1]+"}\n"
 		}
 
 	}
@@ -173,3 +160,34 @@ func WriteGoFile(strs []string)  {
 
 }
 
+func CreatFile()  []string{
+	natures:=[]string{}
+	var str string=io.Rand()
+	str=str+" "+Randresult(RndNature())+"\n"
+	for i := 0; i < 10; i++ {
+		nature:=RndNature()
+		str=str+io.Rand()+" "+Randresult(nature)+"\n"
+		natures=append(natures, nature)
+	}
+	Mywritefile(str)
+	return natures
+}
+
+//后期读文件生成对象
+func CreatObject(strs []string)  {
+	userFile := "/home/wy/go/src/awesomeProject4/test/creatObject.go" //文件路径
+	fout,err := os.Create(userFile) //根据路径创建File的内存地址
+	defer fout.Close() //延迟关闭资源
+	if err != nil{
+		fmt.Println(userFile,err)
+		return
+	}
+	var s string="package test\n"
+
+	s=s+"func Mycreat() {\nt1:=new(Test)\n"
+	for i := 0; i < 10; i++ {
+		s=s+"t1.Set"+io.Capitalize(strs[i*2])+"("+strs[i*2+1]+")\n"
+	}
+	s=s+"\n}"
+	fout.WriteString(s)
+}

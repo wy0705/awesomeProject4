@@ -5,19 +5,18 @@ import (
 	"reflect"
 )
 
-type Aa int
 type Test struct {
-	am Aa
+	am string
 }
 
-func (t *Test)setAm(am Aa)  {
+func (t *Test)setAm(am string)  {
 	t.am=am
 }
-func (t *Test)getAm() Aa {
+func (t *Test)getAm() string {
 	return t.am
 }
 func Myref()  {
-	t:=Test{am:1}
+	t:=Test{am:"123"}
 	a:=reflect.TypeOf(t)
 	b:=reflect.ValueOf(t)
 	for i := 0; i < a.NumField(); i++ {
@@ -25,4 +24,5 @@ func Myref()  {
 		val:=b.Field(i)
 		fmt.Println(key.Name,key.Type,"|",val)
 	}
+
 }

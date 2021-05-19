@@ -5,62 +5,75 @@ import (
 	"reflect"
 )
 
-type Oa int
-type Ci int
-type Jm int
-type Ri int
-type Os int
-type Rr float64
-type Ck string
-type Tc float64
-type Fe int
-type Gf int
-type Cs float64
 type Test struct {
-pq Oa
-re Ci
-ej Jm
-hl Ri
-fl Os
-ak Rr
-df Ck
-hn Tc
-js Fe
-ma Gf
-gd Cs
+cq  string
+lq  int
+ci  string
+rf  int
+rh  string
+ko  int
+ed  string
+ni  string
+kr  string
+li  int
 }
-func (t *Test)setPq(pq Oa) {
-t.pq=pq
+func (t *Test)SetCq (cq  string) {
+t.cq =cq 
 }
-func (t *Test)getPq() Oa{
-return t.pq
+func (t *Test)GetCq () string{
+return t.cq 
 }
-func (t *Test)setRe(re Ci) {
-t.re=re
+func (t *Test)SetLq (lq  int) {
+	t.lq =lq
 }
-func (t *Test)getRe() Ci{
-return t.re
+func (t *Test)GetLq () int{
+	return t.lq
 }
-func (t *Test)setEj(ej Jm) {
-t.ej=ej
+func (t *Test)SetCi (ci  string) {
+t.ci =ci 
 }
-func (t *Test)getEj() Jm{
-return t.ej
+func (t *Test)GetCi () string{
+return t.ci 
 }
-func (t *Test)setHl(hl Ri) {
-t.hl=hl
+func (t *Test)SetRf (rf  int) {
+	t.rf =rf
 }
-func (t *Test)getHl() Ri{
-return t.hl
+func (t *Test)GetRf () int{
+	return t.rf
 }
-func (t *Test)setFl(fl Os) {
-t.fl=fl
+func (t *Test)SetRh (rh  string) {
+t.rh =rh 
 }
-func (t *Test)getFl() Os{
-return t.fl
+func (t *Test)GetRh () string{
+return t.rh 
+}
+func (t *Test)SetKo (ko  int) {
+	t.ko =ko
+}
+func (t *Test)GetKo () int{
+	return t.ko
+}
+func (t *Test)SetEd (ed  string) {
+t.ed =ed 
+}
+func (t *Test)GetEd () string{
+return t.ed 
+}
+func (t *Test)GetNi () string{
+	return t.ni
+}
+func (t *Test)SetNi (ni  string) {
+	t.ni =ni
+}
+func (t *Test)SetKr (kr  string) {
+	t.kr =kr
+}
+func (t *Test)GetKr () string{
+return t.kr 
 }
 func Myref() {
-t:=Test{pq:75,re:95,ej:41,hl:29,fl:23,ak:0.006066,df:"Hhhl",hn:0.008828,js:22,ma:37,gd:0.007192}
+t:=Test{
+cq :"Obcm",lq :43,ci :"Qebh",rf :23,rh :"Tlrg",ko :51,ed :"Pres",ni :"Pqdj",kr :"Raak",li :5}
 a:=reflect.TypeOf(t)
 	b:=reflect.ValueOf(t)
 for i := 0; i < a.NumField(); i++ {
@@ -68,4 +81,5 @@ for i := 0; i < a.NumField(); i++ {
 		val:=b.Field(i)
 		fmt.Println(key.Name,key.Type,"|",val)
 	}
+
 }

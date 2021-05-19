@@ -22,15 +22,21 @@ func Debalk(s string)  string{
 }
 func SplitArray(s string)  []string{
 	var data []byte = []byte(s)
-	str:=[2]byte{}
+	str:=[]byte{}
 	strs:=[]string{}
-	for i := 0; i < len(data); i++ {
-		str[0]=data[i]
-		i++
-		str[1]=data[i]
-		var result string = string(str[:])
-		strs=append(strs,result)
+	for i := 0; i < len(data)-1; i++ {
+		str=append(str,data[i])
+		if data[i]==' '||data[i]=='\n' {
+
+			var result string = string(str[:])
+			strs=append(strs,result)
+			str=[]byte{}
+			if data[i]=='\n' {
+				i++
+			}
+		}
 	}
+	fmt.Println(strs[6])
 	return strs
 }
 // 字符首字母大写
