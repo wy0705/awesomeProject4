@@ -1,9 +1,6 @@
 package main
 
-import (
-	"awesomeProject4/io"
-	"awesomeProject4/myfile"
-)
+import "awesomeProject4/myfile"
 
 func main() {
 	/*//生成随机属性
@@ -27,9 +24,11 @@ func main() {
 
 	str:=myfile.Myreadfile()
 	//分成字符串数组
-	strs:=io.SplitArray(str)
+	strs:=myfile.SplitArray(str)
 	//生成新对象
-	myfile.CreatObject(strs)
+	myfile.RefObiect(strs)
 	//test.Myref()
+
+
 }
 

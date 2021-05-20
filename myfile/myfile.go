@@ -1,14 +1,42 @@
 package myfile
 
 import (
-	"awesomeProject4/io"
 	"fmt"
 	"math/rand"
 	"os"
+	"reflect"
 	"strconv"
 	"time"
 )
 
+func Rand() string {
+	rand.Seed(time.Now().UnixNano())
+	balance1:= [20]byte{'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t'}
+	//balance2:= [20]byte{'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T'}
+	result:=[2]byte{balance1[rand.Intn(20)],balance1[rand.Intn(20)]}
+	var str string = string(result[:])
+	return str
+
+}
+// 字符首字母大写
+func capitalize(str string) string {
+	var upperStr string
+	vv := []rune(str)   // 后文有介绍
+	for i := 0; i < len(vv); i++ {
+		if i == 0 {
+			if vv[i] >= 97 && vv[i] <= 122 {  // 后文有介绍
+				vv[i] -= 32 // string的码表相差32位
+				upperStr += string(vv[i])
+			} else {
+				fmt.Println("Not begins with lowercase letter,")
+				return str
+			}
+		} else {
+			upperStr += string(vv[i])
+		}
+	}
+	return upperStr
+}
 func Mywritefile(s string) {
 	userFile := "/home/wy/go/src/awesomeProject4/res/myfile.txt" //文件路径
 	fout,err := os.Create(userFile) //根据路径创建File的内存地址
@@ -143,8 +171,8 @@ func WriteGoFile(strs []string,natures []string)  {
 	}
 	s=s+"}\n"
 	for i := 0; i < 10; i++ {
-		s=s+"func (t *Test)Set"+io.Capitalize(strs[i*2])+"("+strs[i*2]+" "+natures[i]+") {\n"+"t."+strs[i*2]+"="+strs[i*2]+"\n}\n"
-		s=s+"func (t *Test)Get"+io.Capitalize(strs[i*2])+"() "+natures[i]+"{\n"+"return t."+strs[i*2]+"\n}\n"
+		s=s+"func (t *Test)Set"+capitalize(strs[i*2])+"("+strs[i*2]+" "+natures[i]+") {\n"+"t."+strs[i*2]+"="+strs[i*2]+"\n}\n"
+		s=s+"func (t *Test)Get"+capitalize(strs[i*2])+"() "+natures[i]+"{\n"+"return t."+strs[i*2]+"\n}\n"
 	}
 	s=s+"func Myref() {\nt:=Test{\n"
 	for i := 0; i < 11; i++ {
@@ -162,17 +190,36 @@ func WriteGoFile(strs []string,natures []string)  {
 
 func CreatFile()  []string{
 	natures:=[]string{}
-	var str string=io.Rand()
+	var str string=Rand()
 	str=str+" "+Randresult(RndNature())+"\n"
 	for i := 0; i < 10; i++ {
 		nature:=RndNature()
-		str=str+io.Rand()+" "+Randresult(nature)+"\n"
+		str=str+Rand()+" "+Randresult(nature)+"\n"
 		natures=append(natures, nature)
 	}
 	Mywritefile(str)
 	return natures
 }
 
+func SplitArray(s string)  []string{
+	var data []byte = []byte(s)
+	str:=[]byte{}
+	strs:=[]string{}
+	for i := 0; i < len(data)-1; i++ {
+		str=append(str,data[i])
+		if data[i]==' '||data[i+1]=='\n' {
+
+			var result string = string(str[:])
+			strs=append(strs,result)
+			str=[]byte{}
+			if data[i]=='\n' {
+				i++
+			}
+		}
+	}
+	fmt.Println(strs[6])
+	return strs
+}
 //后期读文件生成对象
 func CreatObject(strs []string)  {
 	userFile := "/home/wy/go/src/awesomeProject4/test/creatObject.go" //文件路径
@@ -186,8 +233,62 @@ func CreatObject(strs []string)  {
 
 	s=s+"func Mycreat() {\nt1:=new(Test)\n"
 	for i := 0; i < 10; i++ {
-		s=s+"t1.Set"+io.Capitalize(strs[i*2])+"("+strs[i*2+1]+")\n"
+		s=s+"t1.Set"+capitalize(strs[i*2])+"("+strs[i*2+1]+")\n"
 	}
 	s=s+"\n}"
 	fout.WriteString(s)
+}
+//反射生成对象
+func RefObiect(strs []string)  {
+	test:=reflect.TypeOf(Test{})
+	if test.Kind()==reflect.Ptr {
+		test=test.Elem()
+	}
+	mytest:=reflect.New(test)
+	for i := 0; i < len(strs)/2-1; i++ {
+		s:=strs[i*2+1]
+		fmt.Println("--------")
+		fmt.Println(s)
+		if reflect.ValueOf(s).Type() == mytest.Elem().Field(i).Type() {
+			mytest.Elem().Field(i).Set(reflect.ValueOf(s))
+		}else {
+			mytest.Elem().Field(i).Set(reflect.ValueOf(s))
+		}
+
+		/*switch mytest.Elem().Field(i).Kind() {
+		case reflect.String:
+			mytest.Elem().Field(i).SetString(s)
+		case reflect.Int:
+			{m,err:=strconv.ParseInt(s, 10, 64)
+				if err==nil {
+					mytest.Elem().Field(i).SetInt(int64(m))
+				}}
+		case reflect.Float64:
+			{f, err := strconv.ParseFloat(s, 32)
+				if err==nil {
+					mytest.Elem().Field(i).SetFloat(f)
+				}}
+		default:
+			fmt.Println("没有该类型")
+
+		}*/
+		/*if mytest.Elem().Field(i).Kind()==reflect.String {
+			mytest.Elem().Field(i).SetString(s)
+		}else if mytest.Elem().Field(i).Kind()==reflect.Int {
+			m,err:=strconv.ParseInt(s, 10, 64)
+			if err==nil {
+				mytest.Elem().Field(i).SetInt(int64(m))
+			}
+		}else if mytest.Elem().Field(i).Kind()==reflect.Float64 {
+			f, err := strconv.ParseFloat(s, 32)
+			if err==nil {
+				mytest.Elem().Field(i).SetFloat(f)
+			}
+		}*/
+	}
+	for i := 0; i < test.NumField(); i++ {
+		key:=test.Field(i).Name
+		val:=mytest.Elem().Field(i)
+		fmt.Println(key,"=",val)
+	}
 }
